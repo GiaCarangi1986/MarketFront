@@ -4,8 +4,8 @@ import '../Style.css'
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 
-export default function AddProductForm (props) {
-  const initialFormState = { idProduct: null, nowCost: '', title: '', scorGodnostiO: '', idCategoryFk: ''}
+export default function AddProductForm(props) {
+  const initialFormState = { idProduct: null, nowCost: '', title: '', scorGodnostiO: '', idCategoryFk: '' }
   // используем useState и передаем в качестве начального значения объект - initialFormState
   const [product, setProduct] = useState(initialFormState)
 
@@ -27,24 +27,26 @@ export default function AddProductForm (props) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Цена</label>
-      <Input type="text" name="nowCost" value={product.nowCost} onChange={handleInputChange}/>
+    <div>
+      <form onSubmit={handleSubmit} >
+        <div class="each">
+          <label>Цена, руб</label>
+          <Input type="text" name="nowCost" value={product.nowCost} onChange={handleInputChange} />
 
-      <label>Название</label>
-      <Input type="text" name="title" value={product.title} onChange={handleInputChange}/>
+          <label>Название</label>
+          <Input type="text" name="title" value={product.title} onChange={handleInputChange} />
 
-      <label>Срок годности</label>
-      <Input type="text" name="scorGodnostiO" value={product.scorGodnostiO} onChange={handleInputChange}/>
+          <label>Срок годности, ч</label>
+          <Input type="text" name="scorGodnostiO" value={product.scorGodnostiO} onChange={handleInputChange} />
 
-      <label>ID категории</label>
-      <Input type="text" name="idCategoryFk" value={product.idCategoryFk} onChange={handleInputChange}/>
-      <br/>
-      <br/>
-      <Button variant="contained" type="submit">Добавить новый продукт</Button>
-      <br/>
-      <br/>
-      <br/>
-    </form>
+          <label>ID категории</label>
+          <Input type="text" name="idCategoryFk" value={product.idCategoryFk} onChange={handleInputChange} />
+        </div>
+        <br />
+        <Button variant="contained" type="submit">Добавить новый продукт</Button>
+      </form>
+      <br />
+      <br />
+    </div>
   )
 }

@@ -16,7 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import makeStyles from "../Style"
 
 function Copyright() {
@@ -38,32 +38,37 @@ export default function RegistrationForm(props) {
         <Toolbar className={classes.ToolBar}>
           <PersonOutlineIcon className={classes.menuButton} />
           <Typography variant="h6" className={classes.title}>
-          <label>{props.aut}</label>
-    </Typography>
-    <form>
-        <Button
-          type="button"
-          variant="contained"
-          onClick={props.onClickCheckAuthorisation}
-          className={classes.submit}
-        >
-          Проверка
+            <label>{props.aut}</label>
+          </Typography>
+          <form>
+            {props.role == "user" &&
+              <Button onClick={props.ClickBasketTo} variant="contained" className={classes.submit1}>
+                <ShoppingBasketIcon />
+              </Button>
+            }
+            <Button
+              type="button"
+              variant="contained"
+              onClick={props.onClickCheckAuthorisation}
+              className={classes.submit}
+            >
+              Проверка
           </Button>
-        {props.oki === 1 &&
-          <Button
-            type="button"
-            variant="contained"
-            onClick={props.onClickLogoff}
-            className={classes.submit}
-          >
-            Выйти
+            {props.oki === 1 &&
+              <Button
+                type="button"
+                variant="contained"
+                onClick={props.onClickLogoff}
+                className={classes.submit}
+              >
+                Выйти
           </Button>
-        }
-      </form>
+            }
+          </form>
         </Toolbar>
       </AppBar>
 
-      
+
 
       {props.oki === 2 &&
         <Container component="main" maxWidth="xs">

@@ -34,18 +34,21 @@ export default function EditProductForm(props) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>Цена</label>
+        <div>
+        <form onSubmit={handleSubmit} class="each">
+
+            <label>Цена, руб</label>
             <Input type="text" name="nowCost" value={product.nowCost} onChange={handleInputChange} />
 
             <label>Название</label>
             <Input type="text" name="title" value={product.title} onChange={handleInputChange} />
 
-            <label>Срок годности</label>
+            <label>Срок годности, ч</label>
             <Input type="text" name="scorGodnostiO" value={product.scorGodnostiO} onChange={handleInputChange} />
 
             <label>ID категории</label>
             <Input type="text" name="idCategoryFk" value={product.idCategoryFk} onChange={handleInputChange} />
+
             <br />
             <br />
             <Button variant="contained" type="submit">Изменить</Button>
@@ -54,11 +57,13 @@ export default function EditProductForm(props) {
                 /* обновляем флаг editing, будет представлен в App позже */
                 onClick={() => props.setEditing(false)}
             >
-                Отмена
+            Отмена
       </Button>
+            
+            
+        </form >
+        <br />
             <br />
-            <br />
-            <br />
-        </form>
+        </div>
     )
 }

@@ -49,11 +49,11 @@ export default function ProductTable(props) {
         <TableHead>
           <TableRow className={classes.TableRow_}>
             <StyledTableCell>id</StyledTableCell>
-            <StyledTableCell align="right">Цена</StyledTableCell>
+            <StyledTableCell align="right">Цена, руб</StyledTableCell>
             <StyledTableCell align="right">Название</StyledTableCell>
-            <StyledTableCell align="right">Срок годности</StyledTableCell>
+            <StyledTableCell align="right">Срок годности, ч</StyledTableCell>
             <StyledTableCell align="right">ID категории</StyledTableCell>
-            {props.role == "admin" &&
+            {(props.role == "admin" || props.role == "user" )&&
               <StyledTableCell align="right"></StyledTableCell>
             }
           </TableRow>
@@ -73,6 +73,11 @@ export default function ProductTable(props) {
                   <StyledTableCell align="right">
                     <Button variant="contained" onClick={() => { props.editRow(product) }}>Редактировать</Button>
                     <Button variant="contained" onClick={() => handleDeleteProduct(product.idProduct)}>Удалить</Button>
+                  </StyledTableCell>
+                }
+                {props.role == "user" &&
+                  <StyledTableCell align="right">
+                    <Button variant="contained" onClick={props.basketTo}>Добавить в корзину</Button>
                   </StyledTableCell>
                 }
               </StyledTableRow>

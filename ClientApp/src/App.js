@@ -26,12 +26,14 @@ export default function App() {
   // значение "текущий пользователь на редактировании" + функция установки этого значения
   const [currentProduct, setCurrentProduct] = useState(initialFormState)
 
+  //корзина (будет строка заказа и сам заказ - у каждого клиента есть своя 1 корзина)
+  const [basket, setBasket] = useState(false)
+
   //в products загружаем все продукты из бд (get запрос)
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())
       .then((data) => setProducts(data));
-
     /*const onClickCheckAuthorisation = async () => {
       var auto = await CheckAuthorisationUser();
       setAuthorisation(auto.result.role);
@@ -110,45 +112,64 @@ export default function App() {
     setCurrentProduct({ idProduct: product.idProduct, nowCost: product.nowCost, title: product.title, scorGodnostiO: product.scorGodnostiO, idCategoryFk: product.idCategoryFk })
   }
 
+  // добавление продукта в корзину
+  const basketTo = product => {
+    //(не, тут надо модальное окно чтобы вылезло - либо добавлен в корзину
+    //либо уже добавлен, так и так надо посылать запрос о добавлении продукта в таблицу СТРОКА ЗАКАЗА)
+    alert('Продукт добавлен');
+    // устанавливаем значения полей для формы редактирования
+    // на основании выбранного "юзера"
+    setCurrentProduct({ idProduct: product.idProduct, nowCost: product.nowCost, title: product.title, scorGodnostiO: product.scorGodnostiO, idCategoryFk: product.idCategoryFk })
+  }
+  //жмем по корзине
+  const ClickBasketTo = () => {
+    setBasket(!basket);
+  };
   return (
     <div className="container">
+      {console.log(products)}
+      <Authorization setRole={setRole} ClickBasketTo={ClickBasketTo} role={role} />
+      <br />
+      {!basket &&
+        <div>
+          {role == "admin" &&
+            <h1><DoneAllIcon /> CRUD операции с продуктами</h1>
+          }
+          <div className="flex-row">
 
-      <Authorization setRole={setRole} />
-      <br/>
-      {role == "admin" &&
-        <h1><DoneAllIcon /> CRUD операции с продуктами</h1>
+            {role == "admin" &&
+              <div className="flex-large">
+                {/* редактируем ? рисуй форму редактирования, иначе - форму добавления */}
+                {editing ? (
+                  <div>
+                    <h2>Изменить продукт</h2>
+                    <EditProductForm
+                      editing={editing}
+                      setEditing={setEditing}
+                      currentProduct={currentProduct}
+                      updateProduct={updateProduct}
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <h2>Добавить продукт</h2>
+                    {/* добавили форму */}
+                    <AddProductForm addProduct={addProduct} />
+                  </div>
+                )}
+              </div>
+            }
+
+            {(role == "admin" || role == "user") &&
+              <div className="flex-large">
+                <h2>Список продуктов</h2>
+                {/* добавили таблицу */}
+                <ProductTable products={products} editRow={editRow} deleteProduct={deleteProduct} role={role} basketTo={basketTo} />
+              </div>
+            }
+          </div>
+        </div>
       }
-      <div className="flex-row">
-        {role == "admin" &&
-          <div className="flex-large">
-            {/* редактируем ? рисуй форму редактирования, иначе - форму добавления */}
-            {editing ? (
-              <div>
-                <h2>Изменить продукт</h2>
-                <EditProductForm
-                  editing={editing}
-                  setEditing={setEditing}
-                  currentProduct={currentProduct}
-                  updateProduct={updateProduct}
-                />
-              </div>
-            ) : (
-              <div>
-                <h2>Добавить продукт</h2>
-                {/* добавили форму */}
-                <AddProductForm addProduct={addProduct} />
-              </div>
-            )}
-          </div>
-        }
-        {(role == "admin" || role == "user") &&
-          <div className="flex-large">
-            <h2>Список продуктов</h2>
-            {/* добавили таблицу */}
-            <ProductTable products={products} editRow={editRow} deleteProduct={deleteProduct} role={role}/>
-          </div>
-        }
-      </div>
     </div>
   )
 }

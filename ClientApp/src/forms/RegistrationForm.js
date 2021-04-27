@@ -116,7 +116,7 @@ export default function RegistrationForm(props) {
                 type="button" //было submit возможно придется вернуть
                 fullWidth
                 variant="contained"
-                className={classes.submit}
+                className={classes.submit1}
                 onClick={props.onClickAuthorisation}
               >
                 Войти

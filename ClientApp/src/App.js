@@ -3,7 +3,9 @@ import AddProductForm from './forms/AddProductForm'
 import EditProductForm from './forms/EditProductForm'
 import ProductTable from './tables/ProductTable'
 import Authorization from './authorization/Authorization'
-import { CheckAuthorisationUser } from './authorization/AuthorizationTools'
+import OrderLineData from './Data/OrderLineData'
+import { addOrderLine } from './requests/OrderLineRequests' //тут из табл буду вызывать добавить в корзину для конкретного продукта
+import { checkOrderLine } from './requests/OrderLineRequests'
 
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 
@@ -22,28 +24,30 @@ export default function App() {
   const [editing, setEditing] = useState(false)
   // начальное значение для формы редактирования
   // так как мы не знаем, кто редактируется - пустые поля
-  const initialFormState = { idProduct: null, nowCost: '', title: '', scorGodnostiO: '', idCategoryFk: '' }
+  const initialFormState = { idProduct: null, nowCost: '', title: '', scorGodnostiO: '', idCategoryFk: '', NameCategory: '' }
   // значение "текущий пользователь на редактировании" + функция установки этого значения
   const [currentProduct, setCurrentProduct] = useState(initialFormState)
 
   //корзина (будет строка заказа и сам заказ - у каждого клиента есть своя 1 корзина)
   const [basket, setBasket] = useState(false)
 
-  //в products загружаем все продукты из бд (get запрос)
+  //список категорий, который оправим в add и edit
+  const [categories, setCategories] = useState([])
+
+  //в products загружаем все продукты из бд (get запрос) и категории
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())
       .then((data) => setProducts(data));
-    /*const onClickCheckAuthorisation = async () => {
-      var auto = await CheckAuthorisationUser();
-      setAuthorisation(auto.result.role);
-    };
-    onClickCheckAuthorisation();*/
+    
+      fetch("https://localhost:44332/api/categories")
+      .then((response) => response.json())
+      .then((data) => setCategories(data));
   }, []);
 
   //данные статуса (201 - админ, 401 - все другие)
   //"admin" (все доступно), "user"(смотреть записи), ""(регистрироваться или войти)
-  const [authorisation, setAuthorisation] = useState([])
+  //const [authorisation, setAuthorisation] = useState([])
 
   const [role, setRole] = useState([])
 
@@ -56,7 +60,8 @@ export default function App() {
         NowCost: product.nowCost,
         Title: product.title,
         ScorGodnostiO: product.scorGodnostiO,
-        IdCategoryFk: product.idCategoryFk
+        IdCategoryFk: product.idCategoryFk,
+        NameCategory: product.nameCategory
       }),
       headers: { "Content-Type": "application/json" },
       credentials: 'include'
@@ -113,13 +118,21 @@ export default function App() {
   }
 
   // добавление продукта в корзину
-  const basketTo = product => {
+  const basketTo = async (product) => {
     //(не, тут надо модальное окно чтобы вылезло - либо добавлен в корзину
     //либо уже добавлен, так и так надо посылать запрос о добавлении продукта в таблицу СТРОКА ЗАКАЗА)
-    alert('Продукт добавлен');
-    // устанавливаем значения полей для формы редактирования
-    // на основании выбранного "юзера"
-    setCurrentProduct({ idProduct: product.idProduct, nowCost: product.nowCost, title: product.title, scorGodnostiO: product.scorGodnostiO, idCategoryFk: product.idCategoryFk })
+
+    //проверка того, есть ли этот продукт уже в строке заказа
+    var result = await checkOrderLine(product.idProduct);
+    if (result == 1) //1 - такая строка уже есть; 2 - строки не было, дабавим
+      alert('Продукт уже в корзине');
+    else {
+      alert('Продукт добавлен в корзину');
+      addOrderLine(product);
+    }
+
+
+
   }
   //жмем по корзине
   const ClickBasketTo = () => {
@@ -128,7 +141,7 @@ export default function App() {
   return (
     <div className="container">
       {console.log(products)}
-      <Authorization setRole={setRole} ClickBasketTo={ClickBasketTo} role={role} />
+      <Authorization setRole={setRole} ClickBasketTo={ClickBasketTo} role={role} setBasket={setBasket}/>
       <br />
       {!basket &&
         <div>
@@ -148,13 +161,14 @@ export default function App() {
                       setEditing={setEditing}
                       currentProduct={currentProduct}
                       updateProduct={updateProduct}
+                      categories={categories}
                     />
                   </div>
                 ) : (
                   <div>
                     <h2>Добавить продукт</h2>
                     {/* добавили форму */}
-                    <AddProductForm addProduct={addProduct} />
+                    <AddProductForm addProduct={addProduct} categories={categories}/>
                   </div>
                 )}
               </div>
@@ -169,6 +183,9 @@ export default function App() {
             }
           </div>
         </div>
+      }
+      {basket &&
+        <OrderLineData />
       }
     </div>
   )

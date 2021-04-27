@@ -83,6 +83,7 @@ export default function SignIn(props) { //войти
       setOki(2); //2 будет означать, что нужно отобразить форму для входа
     }
     props.setRole("guest");
+    props.setBasket(false);
     return result;
   }
 

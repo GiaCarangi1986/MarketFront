@@ -52,7 +52,7 @@ export default function ProductTable(props) {
             <StyledTableCell align="right">Цена, руб</StyledTableCell>
             <StyledTableCell align="right">Название</StyledTableCell>
             <StyledTableCell align="right">Срок годности, ч</StyledTableCell>
-            <StyledTableCell align="right">ID категории</StyledTableCell>
+            <StyledTableCell align="right">Категория</StyledTableCell>
             {(props.role == "admin" || props.role == "user" )&&
               <StyledTableCell align="right"></StyledTableCell>
             }
@@ -68,7 +68,7 @@ export default function ProductTable(props) {
                 <StyledTableCell align="right">{product.nowCost}</StyledTableCell>
                 <StyledTableCell align="right">{product.title}</StyledTableCell>
                 <StyledTableCell align="right">{product.scorGodnostiO}</StyledTableCell>
-                <StyledTableCell align="right">{product.idCategoryFk}</StyledTableCell>
+                <StyledTableCell align="right">{product.nameCategory}</StyledTableCell>
                 {props.role == "admin" &&
                   <StyledTableCell align="right">
                     <Button variant="contained" onClick={() => { props.editRow(product) }}>Редактировать</Button>
@@ -77,7 +77,7 @@ export default function ProductTable(props) {
                 }
                 {props.role == "user" &&
                   <StyledTableCell align="right">
-                    <Button variant="contained" onClick={props.basketTo}>Добавить в корзину</Button>
+                    <Button variant="contained" onClick={() => {props.basketTo(product)}}>Добавить в корзину</Button>
                   </StyledTableCell>
                 }
               </StyledTableRow>

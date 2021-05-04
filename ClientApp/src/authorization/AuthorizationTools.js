@@ -20,6 +20,7 @@ export async function CheckAuthorisationUser() { //проверка автори
   return {
     result: result,
     status: status,
-    error: error
+    error: error,
+    //userId: userId
   };
 }

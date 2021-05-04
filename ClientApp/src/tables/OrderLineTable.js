@@ -32,11 +32,12 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function orderLineTable(props) {
   const {
-      setOrderLines,
-      orderLines,
-      updateCountProduct,
+    setOrderLines,
+    orderLines,
+    updateCountProduct,
   } = props;
 
+  let sum = 0;
   const classes = makeStyles();
 
   return (
@@ -54,7 +55,8 @@ export default function orderLineTable(props) {
         <TableBody>
           {orderLines.length > 0 ? (
             orderLines.map(orderLine => (
-              <StyledTableRow key={orderLine.idorderLine}>
+              sum += orderLine.muchOfProducts * orderLine.costForBuyer,
+              <StyledTableRow key={orderLine.idOrderLine}>
                 <StyledTableCell component="th" scope="row">
                   {orderLine.idOrderLine}
                 </StyledTableCell>
@@ -67,7 +69,8 @@ export default function orderLineTable(props) {
                     name={"muchOfProducts"}
                     InputProps={{
                       inputProps: {
-                        max: orderLine.countMax, min: 1
+                        max: orderLine.countMax > 0 ? orderLine.countMax : 1,
+                        min: 1
                       }
                     }}
                     InputLabelProps={{
@@ -91,5 +94,15 @@ export default function orderLineTable(props) {
           )}
         </TableBody>
       </Table>
+      <label
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        Итого: {sum} р.
+        <Button variant="contained"
+          onClick={() => alert('Спасибо за заказ! Оператор свяжется с вами в ближайшее время')}>Заказать</Button>
+      </label>
     </TableContainer>)
 }

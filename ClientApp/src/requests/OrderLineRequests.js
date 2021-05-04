@@ -1,15 +1,15 @@
   // функция добавления строки заказа
-  export async function addOrderLine (product) {
+  export async function addOrderLine (product, userId) {
     //в бд добавляю
-    let result = await fetch("https://localhost:44332/api/orderLines/", {
+    let result = await fetch("https://localhost:44332/api/orderLines/" +userId, {
       method: "POST",
       body: JSON.stringify({
         IdProduct: product.idProduct,
         NowCost: product.nowCost,
         scorGodnostiO: product.scorGodnostiO,
         Title: product.title,
-        IdCategoryFk: product.idCategoryFk
-      }),
+        IdCategoryFk: product.idCategoryFk,
+      }), 
       headers: { "Content-Type": "application/json" },
       credentials: 'include'
     });
@@ -32,8 +32,8 @@
 }
 
   // функция проверки: есть ли уже такой продукт в корзине
-  export async function checkOrderLine (id) {
-    let result = await fetch("https://localhost:44332/api/orderLines/" + id, {
+  export async function checkOrderLine (id, userId) {
+    let result = await fetch("https://localhost:44332/api/orderLines/" + id+'/'+userId, {
       method: "GET",
       credentials: 'include'
     });

@@ -61,5 +61,5 @@ export default makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-  },
+  }
 }));

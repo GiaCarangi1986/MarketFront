@@ -22,6 +22,7 @@ export default function SignIn(props) { //войти
     }
     setAut(checkAuthorisationUser_result.result.message);
 
+    props.setUserId(checkAuthorisationUser_result.result.userId);
     props.setRole(checkAuthorisationUser_result.result.role);
     //console.log(checkAuthorisationUser_result.oki);
   }
@@ -138,7 +139,10 @@ export default function SignIn(props) { //войти
     else { setInputValuesForAuthorisation({ LoginPhoneNumber: "", Password: "" }) }
     setAut(result.message)
     if (result.oki === 1) //ВХОД ВЫПОЛНЕН
+    {
       setOki(1);
+      props.setUserId(result.userId);
+    }
     props.setRole(result.role);
     return result;
   }

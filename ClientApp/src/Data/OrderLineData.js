@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import OrderLine from '../tables/OrderLineTable'
 
 
-export default function App() {
+export default function App({userId, setUserId}) {
   const url = "https://localhost:44332/api/orderLines/";
 
   const [orderLines, setOrderLines] = useState([])
 
   //в orderLines загружаем все строки заказа для этого пользователя из бд (get запрос)
-  useEffect(() => {
-    fetch(url)
+  useEffect(() =>{
+    fetch(url+'user/'+userId)
       .then((response) => response.json())
       .then((data) => setOrderLines(data));
   }, []);
@@ -29,12 +29,20 @@ export default function App() {
 
   const updateCountProduct = (id, count) => {
     const updatedProducts = [...orderLines];
-    const idxUpdatedProduct = updatedProducts.indexOf(i => i.idorderLine === id);
+    const idxUpdatedProduct = updatedProducts.findIndex(i => i.idOrderLine == id);
     if (idxUpdatedProduct !== -1) {
       updatedProducts[idxUpdatedProduct].muchOfProducts = count;
     }
+    //updatedProducts[id].muchOfProducts = count;
     setOrderLines(updatedProducts);
+    
     // updated array
+    fetch(url + id, {
+      method: "PUT",
+      body: JSON.stringify(updatedProducts[idxUpdatedProduct]),
+      headers: { "Content-Type": "application/json" },
+      credentials: 'include'
+    });
   }
 
   return (

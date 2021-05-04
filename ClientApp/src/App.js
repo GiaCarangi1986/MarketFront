@@ -18,6 +18,9 @@ export default function App() {
     //{ idProduct: 3, nowCost: '50', title: 'огурчик', scorGodnostiO: '15', idCategoryFk: '1' },
   ]
 
+  //id пользователя, для корзины потом
+  const[userId, setUserId] = useState([])
+
   const [products, setProducts] = useState(productsData)
 
   // флаг editing - изначально false, функция установки флага
@@ -123,16 +126,13 @@ export default function App() {
     //либо уже добавлен, так и так надо посылать запрос о добавлении продукта в таблицу СТРОКА ЗАКАЗА)
 
     //проверка того, есть ли этот продукт уже в строке заказа
-    var result = await checkOrderLine(product.idProduct);
+    var result = await checkOrderLine(product.idProduct, userId);
     if (result == 1) //1 - такая строка уже есть; 2 - строки не было, дабавим
       alert('Продукт уже в корзине');
     else {
       alert('Продукт добавлен в корзину');
-      addOrderLine(product);
+      addOrderLine(product, userId);
     }
-
-
-
   }
   //жмем по корзине
   const ClickBasketTo = () => {
@@ -141,7 +141,7 @@ export default function App() {
   return (
     <div className="container">
       {console.log(products)}
-      <Authorization setRole={setRole} ClickBasketTo={ClickBasketTo} role={role} setBasket={setBasket}/>
+      <Authorization setRole={setRole} ClickBasketTo={ClickBasketTo} role={role} setBasket={setBasket} setUserId={setUserId}/>
       <br />
       {!basket &&
         <div>
@@ -185,7 +185,7 @@ export default function App() {
         </div>
       }
       {basket &&
-        <OrderLineData />
+        <OrderLineData userId={userId} setUserId={setUserId}/>
       }
     </div>
   )

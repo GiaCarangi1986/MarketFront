@@ -53,13 +53,13 @@ export default function EditProductForm(props) {
         <form onSubmit={handleSubmit} class="each">
 
             <label>Цена, руб</label>
-            <Input type="text" name="nowCost" value={product.nowCost} onChange={handleInputChange} />
+            <Input type="number" name="nowCost" value={product.nowCost} onChange={handleInputChange} min='1'/>
 
             <label>Название</label>
             <Input type="text" name="title" value={product.title} onChange={handleInputChange} />
 
             <label>Срок годности, ч</label>
-            <Input type="text" name="scorGodnostiO" value={product.scorGodnostiO} onChange={handleInputChange} />
+            <Input type="number" name="scorGodnostiO" value={product.scorGodnostiO} onChange={handleInputChange} min='1'/>
 
             <label>Категория</label>
             {/*<Input type="text" name="idCategoryFk" value={product.idCategoryFk} onChange={handleInputChange} />*/}
